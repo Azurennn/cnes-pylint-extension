@@ -55,7 +55,7 @@ class TestForbiddenUsageChecker(CheckerTestCase):
         nodes = astroid.extract_node(
             (reference_path / "sys_argv_used.py").read_text())
 
-        assert len(nodes) == 6
+        assert len(nodes) == 5
 
         # When - Then
         walker = ASTWalker(self.linter)
@@ -64,7 +64,7 @@ class TestForbiddenUsageChecker(CheckerTestCase):
         with self.assertAddsMessages(
             MessageTest(
                 msg_id="sys-argv-used",
-                node=nodes[2].value,
+                node=nodes[2],
                 args="os.environ",
                 line=10, col_offset=6, end_line=13, end_col_offset=16,
             ),

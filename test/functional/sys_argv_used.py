@@ -7,11 +7,11 @@ import sys
 from sys import argv as a
 
 def function1():
-    a = s.argv[0]  # [sys-argv-used]
+    a = s.argv[0]  #@
 
-print(a)  # [sys-argv-used]
+print(a)  #@
 
-if len(sys.argv > 1):  # [sys-argv-used]
-    param = sys.argv[1]  # [sys-argv-used]
+if len(sys.argv > 1):  #@
+    param = sys.argv[1]  #@
 
-stdout = sys.stdout
+stdout = sys.stdout  #@
