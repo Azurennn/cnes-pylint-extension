@@ -20,7 +20,7 @@ import re
 import os
 
 import astroid
-from astroid.exceptions import InferenceError
+from astroid.exceptions import InferenceError, NotFoundError
 from pylint.extensions import docparams
 from pylint.checkers import BaseChecker, BaseTokenChecker
 from pylint.checkers import utils
@@ -84,7 +84,7 @@ class DesignChecker(BaseChecker):
                         or infer.name != 'acquire'):
                     continue
                 orig_module = infer.root()
-                if (isinstance(orig_module, astroid.Module) and
+                if (isinstance(orig_module, astroid.nodes.Module) and
                         orig_module.name == 'threading'):
                     self.add_message('use-context-manager', node=node,
                                      args='acquiring the lock')
@@ -98,9 +98,9 @@ class DesignChecker(BaseChecker):
             for funcdef in node.func.infer():
                 if funcdef.name == 'open':
                     parent = funcdef.parent
-                    if (isinstance(parent, astroid.Module)
+                    if (isinstance(parent, astroid.nodes.Module)
                             and parent.name == '_io'):
-                        if not isinstance(node.parent, astroid.With):
+                        if not isinstance(node.parent, astroid.nodes.With):
                             self.add_message('use-context-manager', node=node,
                                              args='opening the file')
         except InferenceError:
@@ -110,11 +110,11 @@ class DesignChecker(BaseChecker):
     def visit_while(self, node):
         self._exit_statements.append(0)
         comparisons = None
-        if isinstance(node.test, astroid.Compare):
+        if isinstance(node.test, astroid.nodes.Compare):
             comparisons = [node.test]
-        elif isinstance(node.test, astroid.BoolOp):
+        elif isinstance(node.test, astroid.nodes.BoolOp):
             comparisons = [comp for comp in node.test.values
-                           if isinstance(comp, astroid.Compare)]
+                           if isinstance(comp, astroid.nodes.Compare)]
         if not comparisons:
             return
         for comp in comparisons:
@@ -143,7 +143,7 @@ class DesignChecker(BaseChecker):
                 self.add_message('too-many-decorators', node=node,
                                  args=(len(node.decorators.nodes),
                                        max_decorators))
-        for child in node.nodes_of_class(astroid.Call):
+        for child in node.nodes_of_class(astroid.nodes.Call):
             try:
                 for funcdef in child.func.infer():
                     if funcdef == node:
@@ -171,7 +171,7 @@ class DesignChecker(BaseChecker):
             try:
                 ancestor.getattr(name)
                 return
-            except astroid.exceptions.NotFoundError:
+            except NotFoundError:
                 pass
         self.add_message('builtin-name-used', node=item, args=(name,))
 
@@ -608,18 +608,18 @@ class ForbiddenUsageChecker(BaseChecker):
             return
         for child in node.body:
             # look for a "if __name__ == '__main__'" in the module
-            if not isinstance(child, astroid.If):
+            if not isinstance(child, astroid.nodes.If):
                 continue
-            if not isinstance(child.test, astroid.Compare):
+            if not isinstance(child.test, astroid.nodes.Compare):
                 continue
             ops = child.test.as_string().split()
             if ops[:2] != ['__name__', '=='] or ops[2][1:-1] != '__main__':
                 continue
             # find calls in __main__ scope: sys.exit() is authorized there
             for stmt in child.body:
-                if not isinstance(stmt, astroid.Expr):
+                if not isinstance(stmt, astroid.nodes.Expr):
                     continue
-                if not isinstance(stmt.value, astroid.Call):
+                if not isinstance(stmt.value, astroid.nodes.Call):
                     continue
                 call = stmt.value
                 if self._is_sys_exit_call(call):
@@ -631,24 +631,24 @@ class ForbiddenUsageChecker(BaseChecker):
         if not self._is_sys_exit_call(node):
             return
         expr = node.parent
-        if isinstance(expr.scope(), astroid.Module):
+        if isinstance(expr.scope(), astroid.nodes.Module):
             if self._main_module or node in self._authorized_exits:
                 return
         self.add_message('sys-exit-used', node=node)
 
     @utils.only_required_for_messages('os-environ-used', 'sys-argv-used')
     def visit_attribute(self, node):
-        if self._check_access(node, ('os', os.name), 'environ', astroid.Dict):
+        if self._check_access(node, ('os', os.name), 'environ', astroid.nodes.Dict):
             self.add_message('os-environ-used', node=node, args='environ')
-        if self._check_access(node, ('sys',), 'argv', astroid.List):
+        if self._check_access(node, ('sys',), 'argv', astroid.nodes.List):
             self.add_message('sys-argv-used', node=node)
 
     @utils.only_required_for_messages('os-environ-used', 'sys-argv-used')
     def visit_name(self, node):
-        if self._check_access(node, ('os', os.name), 'environ', astroid.Dict,
+        if self._check_access(node, ('os', os.name), 'environ', astroid.nodes.Dict,
                               False):
             self.add_message('os-environ-used', node=node, args='environ')
-        if self._check_access(node, ('sys',), 'argv', astroid.List, False):
+        if self._check_access(node, ('sys',), 'argv', astroid.nodes.List, False):
             self.add_message('sys-argv-used', node=node)
 
     def _check_access(self, node, modules, var, vtype, attribute=True):
@@ -668,7 +668,7 @@ class ForbiddenUsageChecker(BaseChecker):
                         continue
                 else:
                     orig = infer.parent
-                if isinstance(orig, astroid.Module) and orig.name in modules:
+                if isinstance(orig, astroid.nodes.Module) and orig.name in modules:
                     return True
         except InferenceError:
             pass
@@ -680,7 +680,7 @@ class ForbiddenUsageChecker(BaseChecker):
         try:
             for funcdef in node.func.infer():
                 if (funcdef.name == 'exit'
-                        and isinstance(funcdef.parent, astroid.Module)
+                        and isinstance(funcdef.parent, astroid.nodes.Module)
                         and funcdef.parent.name == 'sys'):
                     return True
         except InferenceError:
