@@ -1,9 +1,8 @@
-"""Docstring introduction  # [too-few-comments]
+"""Docstring introduction
 
 This test checks unsufficient comment lines in a function or a module triggers
 a refactor message
 """
-#pylint: disable=too-high-complexity,missing-docstring-field
 
 def function():
     """docstring"""
@@ -46,7 +45,7 @@ for i in range(10):
     elif i == 10:
         pass
 
-def function2():  # [too-few-comments]
+def function2():
     """description
 
     params
@@ -79,4 +78,3 @@ def short_func():
                 break
             else:
                 pass
-

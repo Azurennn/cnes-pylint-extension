@@ -1,2 +1,0 @@
-too-high-complexity:7:func:Too high cyclomatic complexity (mccabe 14/10)
-too-high-complexity:47:MyClass.method1:Too high cyclomatic complexity (mccabe 16/10)

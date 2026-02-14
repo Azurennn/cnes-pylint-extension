@@ -1,8 +1,9 @@
-"""Checks there is no more than one exit statement per loop"""
-#pylint: disable=too-few-comments,too-high-complexity,too-high-complexity-simplified,missing-docstring-field
+"""
+Checks there is no more than one exit statement per loop
+"""
 
 def func():
-    for i in range(10):  # [multiple-exit-statements]
+    for i in range(10):  #@
         if i > 3:
             break
         if i > 5:
@@ -12,10 +13,10 @@ def func():
         if False:
             break
 
-    for i in range(10):
+    for i in range(10):  #@
         return
 
-    for i in range(10):  # [multiple-exit-statements]
+    for i in range(10):  #@
         if i > 3:
             break
         while True:
@@ -25,7 +26,7 @@ def func():
             if j > 6:
                 break
 
-for var in range(10):
+for var in range(10):  #@
     var += 2
     if var > 6:
         break

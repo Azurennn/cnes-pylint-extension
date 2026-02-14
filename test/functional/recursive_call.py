@@ -1,21 +1,19 @@
-"""Check direct recursion isn't permitted
 """
-#pylint: disable=too-few-comments,missing-docstring-field
+Check direct recursion isn't permitted.
+"""
 
-def func1():
+def func1():  #@
     """does nothing"""
 
-class MyClass(object):
+class MyClass(object):  #@
     def func2(self):
         pass
 
-def func2():
+def func2():  #@
     if True:
-        func2()  # [recursive-call]
+        func2()  #@
     for i in range(10):
         func1()
-    func2()  # [recursive-call]
+    func2()  #@
     c = MyClass()
     c.func2()
-
-

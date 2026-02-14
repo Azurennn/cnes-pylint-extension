@@ -1,20 +1,18 @@
-"""Module docstring  # [malformed-docstring-field, malformed-docstring-field, missing-docstring-field]
+"""Module docstring
 
 blablabla
 blablablabla
 
-:version:1.2.3
+:version: 1.2.3
 :date:
 
 some additional information
 """
 
-def func(foo, bar):  # [missing-param-doc, missing-type-doc]
-    """docstring
-    """
+def func(foo, bar):
     return foo, bar
 
-class MyClass(object):  # [missing-type-doc]
+class MyClass(object):
     """
     MyClass docstring (should describe __init__ params)
 
@@ -25,7 +23,7 @@ class MyClass(object):  # [missing-type-doc]
         self.par1 = par1
         self.par2 = par2
 
-    def method(self, par3, par4):  # [differing-param-doc, missing-param-doc, differing-type-doc, missing-type-doc, missing-docstring-description, missing-return-doc, missing-return-type-doc]
+    def method(self, par3, par4):
         """
 
         :param int par1: some param

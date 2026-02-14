@@ -1,2 +1,0 @@
-recursive-call:14:func2:Consider not using recursion
-recursive-call:17:func2:Consider not using recursion

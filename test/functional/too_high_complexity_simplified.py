@@ -1,10 +1,8 @@
-"""Checks functions and methods having a high McCabe number trigger a refactor
-message
 """
-#pylint: disable=too-few-comments,multiple-exit-statements,too-high-complexity
-#pylint: disable=recursive-call, missing-docstring-field
+Checks functions and methods having a high McCabe number trigger a refactor message
+"""
 
-def func():  # [too-high-complexity-simplified]
+def func():  #@
     '''
     docstring
     '''
@@ -35,7 +33,7 @@ def func():  # [too-high-complexity-simplified]
 
 
 class MyClass(object):
-    def method(self):  # [too-high-complexity-simplified]
+    def method(self):  #@
         '''
         docstring
         '''
@@ -66,7 +64,7 @@ class MyClass(object):
         else:
             return
 
-def func1():
+def func1():  #@
     """simple function"""
     var = 2
     while True:

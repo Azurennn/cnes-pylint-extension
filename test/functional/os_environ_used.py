@@ -1,16 +1,16 @@
-"""Checks the access to environment variables triggers a refactor message
 """
-#pylint: disable=too-few-comments,missing-docstring-field
+Checks the access to environment variables triggers a refactor message
+"""
 
 import os as o
 import os
 from os import environ as e
 
 def function1():
-    a = os.environ  # [os-environ-used]
+    a = os.environ  #@
 
-print(e)  # [os-environ-used]
-env = o.getenv()  # [os-environ-used]
-o.putenv('TOTO', 'titi')  # [os-environ-used]
-sep = o.sep
-o.unsetenv('TOTO')  # [os-environ-used]
+print(e)  #@
+env = o.getenv()  #@
+o.putenv('TOTO', 'titi')  #@
+sep = o.sep  #@
+o.unsetenv('TOTO')  #@

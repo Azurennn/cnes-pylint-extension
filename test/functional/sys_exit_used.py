@@ -10,20 +10,20 @@ from sys import exit as e
 def main():
     """Calling sys.exit() from here is not a good practice"""
     if True:
-        e(4)  # [sys-exit-used]
+        e(4)  #@
     else:
-        sys.exit(5)  # [sys-exit-used]
+        sys.exit(5)  #@
 
-e(6)  # [sys-exit-used]
-toto.exit(10)
-exit(11)
+e(6)  #@
+toto.exit(10)  #@
+exit(11)  #@
 
 if True:
-    sys.exit(7)  # [sys-exit-used]
+    sys.exit(7)  #@
 
 if __name__ == '__something__':
-    s.exit(8)  # [sys-exit-used]
+    s.exit(8)  #@
 
 if __name__ == '__main__':
     main()
-    sys.exit(1)
+    sys.exit(1)  #@

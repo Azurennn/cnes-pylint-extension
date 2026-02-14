@@ -1,23 +1,24 @@
-"""Check no method nor attribute it named after a builtin"""
-#pylint: disable=too-few-comments,missing-docstring-field
+"""
+Check no method nor attribute it named after a builtin
+"""
 
-class MyClass(object):
+class MyClass(object):  #@
     def __init__(self):
-        ((self.str, self.something), plop) = (('test.txt', 'hello'), 'plop')  # [builtin-name-used]
+        ((self.str, self.something), plop) = (('test.txt', 'hello'), 'plop')  #@
 
-    bool = True  # [builtin-name-used]
+    bool = True  #@
 
-    def map(self):  # [builtin-name-used]
+    def map(self):  #@
         pass
 
     def dummy_method(cls):
         pass
-    zip = classmethod(dummy_method)  # [builtin-name-used]
+    zip = classmethod(dummy_method)  #@
 
-MyClass.dict = "hi there"  # [builtin-name-used]
+MyClass.dict = "hi there"  #@
 
 
-class ChildClass(MyClass):
+class ChildClass(MyClass):  #@
 
     def map(self):
         """inherited: should be ok"""
